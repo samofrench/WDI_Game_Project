@@ -1,0 +1,48 @@
+body {
+	color: white;
+	padding-bottom: 6em;
+	background-image: url(LakeUnion.jpg);	
+	background-size: cover;
+	font-weight: 900;
+}
+
+.container {
+}
+
+#frame {
+	background: rgba(100, 100, 100, .75);
+}
+
+.img-circle {
+	border: 15px solid white;
+	margin: 0 auto;
+}
+
+/*#stats {
+	font-size: 1em;
+}
+
+#stats li {
+	text-align: left;
+	background: none;
+	border: none;
+}*/
+
+#stats li span {
+	text-align: right;
+}
+
+#player1bid, #player2bid {
+	display: inline-block;
+	width: auto;
+}
+
+#bankroll {
+	background-color: lightGrey;
+	height: 6em;
+	border-radius: 10px;
+	font-size: 1em;
+}
+
+#bankroll.row {
+}
