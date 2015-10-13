@@ -72,6 +72,7 @@ $(document).ready(function () {
 	};
 
 	var getWinner = function () {
+
 		if (parseInt(players[0].bid) > parseInt(players[1].bid)) {
 			return 0;
 		} else if (parseInt(players[0].bid) < parseInt(players[1].bid)) {
