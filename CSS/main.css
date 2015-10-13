@@ -53,6 +53,7 @@ span {
 	background: none;
 	opacity: .75;
 	color: white;
+	opacity: .5;
 	border: 1px solid white;
 	padding: 3px 8px;
 }

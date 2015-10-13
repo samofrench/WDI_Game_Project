@@ -72,9 +72,9 @@ $(document).ready(function () {
 	};
 
 	var getWinner = function () {
-		if (players[0].bid > players[1].bid) {
+		if (parseInt(players[0].bid) > parseInt(players[1].bid)) {
 			return 0;
-		} else if (players[0].bid < players[1].bid) {
+		} else if (parseInt(players[0].bid) < parseInt(players[1].bid)) {
 			return 1;
 		}
 	}
