@@ -28,10 +28,6 @@ body {
 	border: none;
 }*/
 
-#stats li span {
-	text-align: right;
-}
-
 #player1bid, #player2bid {
 	display: inline-block;
 	width: auto;
@@ -50,4 +46,17 @@ body {
 span {
 	font-size: .75em;
 	font-weight: 400; 
+}
+
+#collapser {
+	float: right;
+	background: none;
+	opacity: .75;
+	color: white;
+	border: 1px solid white;
+	padding: 3px 8px;
+}
+
+#collapser:hover {
+	background-color: rgba(255, 255, 255, .5);
 }

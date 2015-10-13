@@ -83,6 +83,8 @@ $(document).ready(function () {
 	loadParcel(parcels[index]);
 	setNames();
 
+//	$('demo').on('click',$('demo').collapse('toggle'));
+
 	$('#p1input').submit(function (e) {
 		e.preventDefault();
 
@@ -127,6 +129,7 @@ $(document).ready(function () {
 			$('#p2-auc-bid').html("$"+parseInt(players[1].bid).toLocaleString());
 			winner = getWinner();
 			$('#auc-winner').html(players[winner].name+" wins the auction!");
+			$('#demo').collapse('hide');
 			$('.auction').removeClass('hidden');
 		} 
 			
@@ -155,6 +158,8 @@ $(document).ready(function () {
 
 		$('.compare').addClass('hidden');
 		$('#p1input').removeClass('hidden');
+		$('#demo').collapse('show');
+
 		players[0].active = 1;
 		players[1].active = 0;
 		players[0].bid = null;
