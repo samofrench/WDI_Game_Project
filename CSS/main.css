@@ -46,3 +46,8 @@ body {
 
 #bankroll.row {
 }
+
+span {
+	font-size: .75em;
+	font-weight: 400; 
+}

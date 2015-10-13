@@ -8,22 +8,24 @@ $(document).ready(function () {
 	console.log("JS ready");
 	// var zipCodes = [98104, 98101, 98122, 98121, 98112, 98102, 98109, 98119, 98199, 98107, 98117, 98103, 98105, 98115];
 
-	var addParcel = function (p1, p2, sf, lotsf, beds, baths, yr, app) {
+	var addParcel = function (p1, p2, sf, lotsf, beds, full, tq, half, yr, app, wf, mr) {
 		var newParcel = {parcel1: p1, parcel2: p2, squarefeet: sf, lot: lotsf, 
-			bedrooms: beds, bathrooms: baths, yearBuilt: yr, value: app};
+			bedrooms: beds, fullBR: full, threeQBR: tq, halfBR: half, 
+			yearBuilt: yr, value: app, waterfront: wf, mtRainier: mr};
+
 		parcels.push(newParcel);
 	};
-	addParcel(193030, 0905, 1240, 4800, 2, 1, 1920, 366000);
-	addParcel(051000, 3120, 1410, 3040, 2, 1, 1908, 530000);
-	addParcel(882790, 0070, 3650, 9040, 5, 1.5, 1925, 669000);
-	addParcel(290220, 1185, 2220, 7250, 4, 2, 1944, 826000);
-	addParcel(359250, 0881, 4020, 8230, 3, 1.5, 1924, 1017000);
-	addParcel(982820, 2240, 1380, 4400, 2, 1, 1920, 354000);
-	addParcel(794260, 0970, 1300, 4800, 4, 2, 1954, 321000);
-	addParcel(545780, 0121, 2990, 6050, 4, 2.5, 1949, 1086000);
-	addParcel(080900, 3620, 2810, 4770, 2, 1.5, 1914, 594000);
-	addParcel(119300, 0715, 2080, 6000, 4, 1, 1952, 499000);
-	addParcel(751850, 6220, 1650, 5100, 3, 1.75, 1906, 394000);
+	addParcel(193030, 0905, 1240, 4800, 2, 1, 1, 0, 1920, 366000, 0, 0);
+	addParcel(051000, 3120, 1410, 3040, 2, 1, 1, 0, 1908, 530000, 0, 0);
+	addParcel(882790, 0070, 3650, 9040, 5, 1, 0, 1, 1925, 669000, 0, 0);
+	addParcel(290220, 1185, 2220, 7250, 4, 1, 1, 0, 1944, 826000, 0, 0);
+	addParcel(359250, 0881, 4020, 8230, 3, 1, 0, 1, 1924, 1017000, 0, 0);
+	addParcel(982820, 2240, 1380, 4400, 2, 1, 0, 1, 1920, 354000, 0, 0);
+	addParcel(794260, 0970, 1300, 4800, 4, 1, 0, 1, 1954, 321000, 0, 0);
+	addParcel(545780, 0121, 2990, 6050, 4, 2, 1, 0, 1949, 1086000, 0, 0);
+	addParcel(080900, 3620, 2810, 4770, 2, 1, 1, 0, 1914, 594000, 0, 0);
+	addParcel(119300, 0715, 2080, 6000, 4, 2, 0, 1, 1952, 499000, 0, 0);
+	addParcel(751850, 6220, 1650, 5100, 3, 1, 0, 1, 1906, 394000, 0, 0);
 
 	var dollarDisplay = function (amt) {
 		return ((parseInt(amt)<0)?"-":"")+"$"+Math.abs(amt).toLocaleString();
@@ -33,16 +35,16 @@ $(document).ready(function () {
 		$('#sf').html(obj.squarefeet.toLocaleString());
 		$('#lsf').html(obj.lot.toLocaleString());
 		$('#beds').html(obj.bedrooms);
-		$('#br').html(obj.bathrooms*1.00);
+		$('#br').html(obj.fullBR+" / "+obj.threeQBR+" / "+obj.halfBR);
 		$('#yr').html(obj.yearBuilt);
 	};
 
 
 	var setNames = function () {
-		$('#p1input label').html(players[0].name+" bid: ");
-		$('#p2input label').html(players[1].name+" bid: ");
-		$('#p1-bank-name').html(players[0].name+" Bankroll: ");
-		$('#p2-bank-name').html(players[1].name+" Bankroll: ");
+		$('#p1input label').html(players[0].name+" bid");
+		$('#p2input label').html(players[1].name+" bid");
+		$('#p1-bank-name').html(players[0].name+" Bankroll");
+		$('#p2-bank-name').html(players[1].name+" Bankroll");
 		$('#p1-bank-amt').html(dollarDisplay(players[0].bankroll));
 		$('#p2-bank-amt').html(dollarDisplay(players[1].bankroll));
 
@@ -119,8 +121,8 @@ $(document).ready(function () {
 			$('#p2input').addClass('hidden');
 
 
-			$('#p1-auc-name').html(players[0].name+" bid: ");
-			$('#p2-auc-name').html(players[1].name+" bid: ");
+			$('#p1-auc-name').html(players[0].name+" bid");
+			$('#p2-auc-name').html(players[1].name+" bid");
 			$('#p1-auc-bid').html("$"+parseInt(players[0].bid).toLocaleString());
 			$('#p2-auc-bid').html("$"+parseInt(players[1].bid).toLocaleString());
 			winner = getWinner();
@@ -134,10 +136,10 @@ $(document).ready(function () {
 		e.preventDefault();
 
 		$('.auction').addClass('hidden');
-		$('#compare-name').html(players[winner].name+" bid: ");
+		$('#compare-name').html(players[winner].name+" bid");
 		$('#compare-bid').html("$"+parseInt(players[winner].bid).toLocaleString());
 		$('#compare-home').html("$"+parseInt(parcels[index].value).toLocaleString());
-		$('#compare-net-name').html(players[winner].name+" net: ");
+		$('#compare-net-name').html(players[winner].name+" net");
 		var net = parcels[index].value - players[winner].bid;
 		$('#compare-net').html(dollarDisplay(net));		
 //		$('#compare-net').html(((net<0)?"-":"")+"$"+parseInt(Math.abs(net)).toLocaleString());
