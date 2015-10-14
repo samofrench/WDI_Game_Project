@@ -44,7 +44,7 @@ $(document).ready(function () {
 	};
 
 	var loadParcel = function (obj) {
-		$('#image').html("<img src=images/Properties/"+obj.parcel1+obj.parcel2+".jpeg class='img-responsive img-circle' alt='Image'>");
+		$('#image').html("<img src=Images/Properties/"+obj.parcel1+obj.parcel2+".jpeg class='img-responsive img-circle' alt='House'>");
 		$('#sf').html(parseInt(obj.squarefeet).toLocaleString());
 		$('#lsf').html(parseInt(obj.lot).toLocaleString());
 		$('#beds').html(obj.bedrooms);
@@ -52,13 +52,16 @@ $(document).ready(function () {
 		$('#yr').html(obj.yearBuilt);
 		(parseInt(obj.mtRainier) > 0)?$('#mr').removeClass('hidden'):$('#mr').addClass('hidden');
 		$('#pr').html(getRange(obj));
+		$('#map-div').html("<img src=Images/Maps/"+obj.parcel1+obj.parcel2+"-map.jpeg class='map' alt='Map'>");
+		$('#map-div').append("<i class='fa fa-map-marker'></i>");
+
 	};
 
 	var setNames = function () {
 		players[0].name = $('#player1name').val();
 		players[1].name = $('#player2name').val();
-		$('#p1input label').html(players[0].name+" bid");
-		$('#p2input label').html(players[1].name+" bid");
+		$('#p1input label').html(players[0].name+" bid $");
+		$('#p2input label').html(players[1].name+" bid $");
 		$('#p1-bank-name').html(players[0].name+" Bankroll");
 		$('#p2-bank-name').html(players[1].name+" Bankroll");
 		$('#p1-bank-amt').html(dollarDisplay(players[0].bankroll));
@@ -115,6 +118,7 @@ $(document).ready(function () {
 
 		if (validNames($('#player1name').val(), $('#player2name').val())) {
 			$('.compare').addClass('hidden');
+			$('.box').removeClass('hidden');
 			$('#p1input').removeClass('hidden');
 			$('#frame').removeClass('hidden');
 			$('#image').removeClass('hidden');
@@ -154,7 +158,7 @@ $(document).ready(function () {
 
 		if (!validBid($('#player1bid').val())) {
 			
-			alert("Please enter an integer!");
+			alert("Please enter a positive integer!");
 			$('#player1bid').val('').focus();
 
 		} else {
@@ -195,6 +199,7 @@ $(document).ready(function () {
 			$('#auc-winner').html(players[winner].name+" wins the auction!");
 			$('#demo').collapse('hide');
 			$('#auc-next button').focus();
+			$('.box').addClass('hidden');
 			$('.auction').removeClass('hidden');
 		} 
 			
@@ -232,6 +237,7 @@ $(document).ready(function () {
 		winner = null;
 		
 		if(index < parcels.length) {
+			$('.box').removeClass('hidden');
 			loadParcel(parcels[index]);
 		} else {
 			$('#endGame h3').html(winText());

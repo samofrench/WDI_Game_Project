@@ -1,7 +1,7 @@
 body {
 	color: white;
 	padding-bottom: 6em;
-	background-image: url(LakeUnion.jpg);	
+	background-image: url(../Images/LakeUnion.jpg);	
 	background-size: cover;
 	font-weight: 900;
 }
@@ -15,19 +15,9 @@ body {
 }
 
 .img-circle {
-	border: 15px solid white;
+	border: 2px solid black;
 	margin: 0 auto;
 }
-
-/*#stats {
-	font-size: 1em;
-}
-
-#stats li {
-	text-align: left;
-	background: none;
-	border: none;
-}*/
 
 #player1bid, #player2bid {
 	display: inline-block;
@@ -48,37 +38,113 @@ span {
 }
 
 #collapser {
-	float: right;
+	padding: 0;
 	background: none;
-	opacity: .75;
-	color: white;
-	opacity: .5;
-	border: 1px solid white;
-	padding: 3px 8px;
+	border: none;
+	outline: none;
+
 }
 
 #collapser:hover {
-	background-color: rgba(255, 255, 255, .5);
+	color: lightGrey;
 }
 
 #info {
 	position: fixed;
 	color: black;
 	top: 10%;
-	background: rgba(255, 255, 255, .9);
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
 	border-radius: 10px;
+	width: auto;
+	margin-left: 10%;
+	margin-right: 10%;
+	box-sizing: border-box;
 
 }
 
 #endGame {
 	position: fixed;
 	color: black;
-	top: 10%;
-	background: rgba(255, 255, 255, .9);
+	top: 30%;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
 	border-radius: 10px;
+	width: 40%;
+	margin-left: 30%;
+	margin-right: 30%;
+	box-sizing: border-box;
 }
 
 #start-button {
 	display: block;
 	margin: 0 auto;
 }
+
+#p1input, #p2input {
+	text-align: center;
+	margin: 1em 0;
+}
+
+.box {
+	color: black;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
+	border-radius: 10px;
+	box-sizing: border-box;	
+}
+
+.auction, .compare {
+	color: black;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
+	border-radius: 10px;
+	box-sizing: border-box;	
+	padding: 2em;
+}
+
+.stats {
+	color: black;
+	background-color: white;
+	margin-top: 40px;
+}
+
+#startGame {
+	margin-top: 40px; 
+}
+
+.map {
+	box-sizing: border-box;
+	z-index: 1;	
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+}
+
+.fa-map-marker {
+	z-index: 2;
+	font-size: 2em;
+	color: #FF2A39;
+	display: inline;
+	position: relative;
+	left: -150px;
+}
+
+#map-div {
+	
+	margin-top: 40px;
+	text-align: center;
+}
+
+td {
+	font-weight: 400;
+}
+
+
+
+
+
+
+
