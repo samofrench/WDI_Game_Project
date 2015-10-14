@@ -11,6 +11,7 @@ body {
 
 #frame {
 	background: rgba(100, 100, 100, .75);
+	height: 100%;
 }
 
 .img-circle {
@@ -36,11 +37,9 @@ body {
 #bankroll {
 	background-color: lightGrey;
 	height: 6em;
-	border-radius: 10px;
 	font-size: 1em;
-}
-
-#bankroll.row {
+	width: 100%;
+	box-size: border-box;
 }
 
 span {
@@ -60,4 +59,26 @@ span {
 
 #collapser:hover {
 	background-color: rgba(255, 255, 255, .5);
+}
+
+#info {
+	position: fixed;
+	color: black;
+	top: 10%;
+	background: rgba(255, 255, 255, .9);
+	border-radius: 10px;
+
+}
+
+#endGame {
+	position: fixed;
+	color: black;
+	top: 10%;
+	background: rgba(255, 255, 255, .9);
+	border-radius: 10px;
+}
+
+#start-button {
+	display: block;
+	margin: 0 auto;
 }

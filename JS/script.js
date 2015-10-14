@@ -1,55 +1,68 @@
-var parcels = [];
 var players = [{name: "Red", active: 1, bankroll: 0, bid: null}, {name: "Blue", active: 0, bankroll: 0, bid: null}];
-//	localStorage.players = players;
+
+
+var parcels = data;
 var winner = null;
 var index = 0;
 
 $(document).ready(function () {
 	console.log("JS ready");
-	// var zipCodes = [98104, 98101, 98122, 98121, 98112, 98102, 98109, 98119, 98199, 98107, 98117, 98103, 98105, 98115];
+	
+	var shuffle = function(array) {
+	  var m = array.length, t, i;
 
-	var addParcel = function (p1, p2, sf, lotsf, beds, full, tq, half, yr, app, wf, mr) {
-		var newParcel = {parcel1: p1, parcel2: p2, squarefeet: sf, lot: lotsf, 
-			bedrooms: beds, fullBR: full, threeQBR: tq, halfBR: half, 
-			yearBuilt: yr, value: app, waterfront: wf, mtRainier: mr};
+	  // While there remain elements to shuffle…
+	  while (m) {
 
-		parcels.push(newParcel);
-	};
-	addParcel(193030, 0905, 1240, 4800, 2, 1, 1, 0, 1920, 366000, 0, 0);
-	addParcel(051000, 3120, 1410, 3040, 2, 1, 1, 0, 1908, 530000, 0, 0);
-	addParcel(882790, 0070, 3650, 9040, 5, 1, 0, 1, 1925, 669000, 0, 0);
-	addParcel(290220, 1185, 2220, 7250, 4, 1, 1, 0, 1944, 826000, 0, 0);
-	addParcel(359250, 0881, 4020, 8230, 3, 1, 0, 1, 1924, 1017000, 0, 0);
-	addParcel(982820, 2240, 1380, 4400, 2, 1, 0, 1, 1920, 354000, 0, 0);
-	addParcel(794260, 0970, 1300, 4800, 4, 1, 0, 1, 1954, 321000, 0, 0);
-	addParcel(545780, 0121, 2990, 6050, 4, 2, 1, 0, 1949, 1086000, 0, 0);
-	addParcel(080900, 3620, 2810, 4770, 2, 1, 1, 0, 1914, 594000, 0, 0);
-	addParcel(119300, 0715, 2080, 6000, 4, 2, 0, 1, 1952, 499000, 0, 0);
-	addParcel(751850, 6220, 1650, 5100, 3, 1, 0, 1, 1906, 394000, 0, 0);
+	    // Pick a remaining element…
+	    i = Math.floor(Math.random() * m--);
+
+	    // And swap it with the current element.
+	    t = array[m];
+	    array[m] = array[i];
+	    array[i] = t;
+	  }
+
+	  return array;
+	}
 
 	var dollarDisplay = function (amt) {
 		return ((parseInt(amt)<0)?"-":"")+"$"+Math.abs(amt).toLocaleString();
 	};
 
+	var getRange = function (p) {
+		switch (true) {
+			case (parseInt(p.value) > 1000000):
+				return "More than $1,000,000";
+				break;
+			case (parseInt(p.value) >= 500000):
+				return "More than $500,000; less than $1,000,000"
+				break;
+			default: 
+				return "Less than $500,000";
+		}
+	};
+
 	var loadParcel = function (obj) {
-		$('#sf').html(obj.squarefeet.toLocaleString());
-		$('#lsf').html(obj.lot.toLocaleString());
+		$('#image').html("<img src=images/Properties/"+obj.parcel1+obj.parcel2+".jpeg class='img-responsive img-circle' alt='Image'>");
+		$('#sf').html(parseInt(obj.squarefeet).toLocaleString());
+		$('#lsf').html(parseInt(obj.lot).toLocaleString());
 		$('#beds').html(obj.bedrooms);
 		$('#br').html(obj.fullBR+" / "+obj.threeQBR+" / "+obj.halfBR);
 		$('#yr').html(obj.yearBuilt);
+		(parseInt(obj.mtRainier) > 0)?$('#mr').removeClass('hidden'):$('#mr').addClass('hidden');
+		$('#pr').html(getRange(obj));
 	};
 
-
 	var setNames = function () {
+		players[0].name = $('#player1name').val();
+		players[1].name = $('#player2name').val();
 		$('#p1input label').html(players[0].name+" bid");
 		$('#p2input label').html(players[1].name+" bid");
 		$('#p1-bank-name').html(players[0].name+" Bankroll");
 		$('#p2-bank-name').html(players[1].name+" Bankroll");
 		$('#p1-bank-amt').html(dollarDisplay(players[0].bankroll));
 		$('#p2-bank-amt').html(dollarDisplay(players[1].bankroll));
-
-		// $('#p1-bank-amt').html("$"+parseInt(players[0].bankroll).toLocaleString());
-		// $('#p2-bank-amt').html("$"+parseInt(players[1].bankroll).toLocaleString());
 
 	};
 
@@ -79,11 +92,62 @@ $(document).ready(function () {
 		}
 	}
 
+	var winText = function () {
+		if (parseInt(players[0].bankroll) > parseInt(players[1].bankroll)) {
+			return players[0].name + " wins the game!";
+		} else if (parseInt(players[0].bankroll) < parseInt(players[1].bankroll)) {
+			return players[1].name + " wins the game!";
+		} else {
+			return "It's a tie!"
+		}
+	};
 
-	loadParcel(parcels[index]);
-	setNames();
+	var validNames = function (n1, n2) {
+		return ((n1.length&&n2.length)&&(n1!=n2));
+	};
 
-//	$('demo').on('click',$('demo').collapse('toggle'));
+	// var setDifficulty = function () {
+
+	// };
+
+	$('#startGame').submit(function (e) {
+		e.preventDefault();
+
+		if (validNames($('#player1name').val(), $('#player2name').val())) {
+			$('.compare').addClass('hidden');
+			$('#p1input').removeClass('hidden');
+			$('#frame').removeClass('hidden');
+			$('#image').removeClass('hidden');
+			$('.stats').removeClass('hidden');
+			$('#bankroll').removeClass('hidden');
+			$('#demo').collapse('show');
+
+			if ($('#easy:checked')[0]) {
+				$('#difficulty-range').removeClass('hidden');
+			} else {
+				$('#difficulty-range').addClass('hidden');
+			}
+
+			players[0].active = 1;
+			players[1].active = 0;
+			players[0].bid = null;
+			players[1].bid = null;
+			players[0].bankroll = 0;
+			players[1].bankroll = 0;		
+			index = 0;
+			winner = null;
+
+			parcels = shuffle(parcels);
+			loadParcel(parcels[index]);
+		
+			setNames();
+			$('#p1input').focus()
+			$('#info').addClass('hidden');
+		} else {
+			alert("Please enter different names in both fields.");
+		};
+
+	});
 
 	$('#p1input').submit(function (e) {
 		e.preventDefault();
@@ -130,6 +194,7 @@ $(document).ready(function () {
 			winner = getWinner();
 			$('#auc-winner').html(players[winner].name+" wins the auction!");
 			$('#demo').collapse('hide');
+			$('#auc-next button').focus();
 			$('.auction').removeClass('hidden');
 		} 
 			
@@ -145,7 +210,6 @@ $(document).ready(function () {
 		$('#compare-net-name').html(players[winner].name+" net");
 		var net = parcels[index].value - players[winner].bid;
 		$('#compare-net').html(dollarDisplay(net));		
-//		$('#compare-net').html(((net<0)?"-":"")+"$"+parseInt(Math.abs(net)).toLocaleString());
 		players[winner].bankroll += net;
 		setNames(); 
 		$('.compare').removeClass('hidden');
@@ -166,11 +230,45 @@ $(document).ready(function () {
 		players[1].bid = null;
 		index++;
 		winner = null;
-		loadParcel(parcels[index]);
-			
+		
+		if(index < parcels.length) {
+			loadParcel(parcels[index]);
+		} else {
+			$('#endGame h3').html(winText());
+			$('#p1input').addClass('hidden');
+			$('#demo').collapse('hide');
+			$('#endGame').removeClass('hidden');
+		};	
 	});
 
+	$('#endGame-newGame').submit(function (e) {
+		e.preventDefault();
 
+		$('#player1name').val('');
+		$('#player2name').val('');
+		$('#endGame').addClass('hidden');
+		$('#image').addClass('hidden');
+		$('.stats').addClass('hidden');
+		$('#bankroll').addClass('hidden');
+		$('#frame').addClass('hidden');
+		$('#info').removeClass('hidden');
+
+	});
+
+	$('#btn-newGame').submit(function (e) {
+		e.preventDefault();
+
+		$('#player1name').val('');
+		$('#player2name').val('');
+		$('#image').addClass('hidden');
+		$('.stats').addClass('hidden');
+		$('#p1input').addClass('hidden');
+		$('#p2input').addClass('hidden');
+		$('#bankroll').addClass('hidden');
+		$('#frame').addClass('hidden');
+		$('#info').removeClass('hidden');
+
+	});
 
 
 
