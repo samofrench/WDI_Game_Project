@@ -1,7 +1,7 @@
 body {
 	color: white;
 	padding-bottom: 6em;
-	background-image: url(LakeUnion.jpg);	
+	background-image: url(../Images/LakeUnion.jpg);	
 	background-size: cover;
 	font-weight: 900;
 }
@@ -11,41 +11,166 @@ body {
 
 #frame {
 	background: rgba(100, 100, 100, .75);
+	height: 100%;
+}
+
+#image {
+	margin-top: 2em;
+	margin-bottom: 2em;
 }
 
 .img-circle {
-	border: 15px solid white;
+	border: 2px solid black;
 	margin: 0 auto;
 }
-
-/*#stats {
-	font-size: 1em;
-}
-
-#stats li {
-	text-align: left;
-	background: none;
-	border: none;
-}*/
 
 #player1bid, #player2bid {
 	display: inline-block;
 	width: auto;
 }
 
-#bankroll {
-	background-color: lightGrey;
-	height: 6em;
-	border-radius: 10px;
-	font-size: 1em;
-}
-
-#bankroll.row {
-}
 
 span {
 	font-size: .75em;
 	font-weight: 400; 
+}
+
+#collapser {
+	padding: 0;
+	background: none;
+	border: none;
+	outline: none;
+
+}
+
+#collapser:hover {
+	color: lightGrey;
+}
+
+#info {
+	position: fixed;
+	color: black;
+	top: 10%;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
+	border-radius: 10px;
+	width: auto;
+	margin-left: 10%;
+	margin-right: 10%;
+	box-sizing: border-box;
+
+}
+
+#endGame {
+	position: fixed;
+	color: black;
+	top: 30%;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
+	border-radius: 10px;
+	width: 40%;
+	margin-left: 30%;
+	margin-right: 30%;
+	box-sizing: border-box;
+}
+
+#start-button {
+	display: block;
+	margin: 0 auto;
+}
+
+#p1input, #p2input {
+	text-align: center;
+	margin: 1em 0;
+}
+
+#player1name, #player2name {
+	text-align: center;
+	width: 60%;
+	margin-left: 20%;
+}
+
+.box {
+	color: black;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
+	border-radius: 10px;
+	box-sizing: border-box;	
+}
+
+.auction, .compare {
+	color: black;
+	background: rgba(255, 255, 255, 1);
+	text-align: center;
+	border: 2px solid black;
+	border-radius: 10px;
+	box-sizing: border-box;	
+	padding: 2em;
+}
+
+.stats {
+	color: black;
+	background-color: white;
+	margin-top: 40px;
+}
+
+#startGame {
+	margin-top: 40px; 
+}
+
+.map {
+	box-sizing: border-box;
+	z-index: 1;	
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+}
+
+.fa-map-marker {
+	z-index: 2;
+	font-size: 2em;
+	color: #FF2A39;
+	display: inline;
+	position: relative;
+	left: -150px;
+}
+
+#map-div {
+	
+	margin-top: 2em;
+	text-align: center;
+}
+
+td {
+	font-weight: 400;
+}
+
+
+#bankroll {
+	background-color: lightGrey;
+/*	height: 6em;
+*/	color: black;
+	font-size: 1em;
+	width: 100%;
+	box-size: border-box;
+}
+
+.bank-logo {
+	font-family: 'Bree Serif', serif;
+	color: black;
+	font-size: 3em;
+	font-weight: 400;
+	text-align: center;
+	margin: 10px;
+	border: 1px solid white;
+	border-radius: 7px;
+}
+
+#restart {
+	float: right;
+	margin-right: 40px;
+	margin-top: 2em;
 }
 
 #collapser {
@@ -57,8 +182,60 @@ span {
 	border: 1px solid white;
 	padding: 3px 5px;
 
+/*	line-height: 2em;
+	font-size: 1.25em;
+	text-align: center;*/
+
 }
 
-#collapser:hover {
-	background-color: rgba(255, 255, 255, .5);
+.positive {
+	color: #197802;
 }
+
+.negative {
+	color: #9F0509;
+}
+
+.sum {
+	border-bottom: 1px solid black;
+}
+
+#car-col {
+	height: 100%;
+}
+
+.carousel {
+	height: 250px;
+}
+
+.carousel p {
+	padding: 50px;
+	font-size: 1.25em;
+	min-height: 6em;
+}
+
+.carousel-control.right, .carousel-control.left {
+	background-image: none;
+}
+
+.glyphicon-chevron-left, .glyphicon-chevron-right {
+	text-shadow: none;
+	color: black;
+}
+
+.glyphicon-chevron-left:hover, .glyphicon-chevron-right:hover {
+	color: lightGrey;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
