@@ -1,6 +1,4 @@
 var players = [{name: "Red", active: 1, bankroll: 0, bid: null}, {name: "Blue", active: 0, bankroll: 0, bid: null}];
-
-
 var parcels = data;
 var winner = null;
 var index = 0;
@@ -8,6 +6,7 @@ var index = 0;
 $(document).ready(function () {
 	console.log("JS ready");
 	
+// Fisher-Yates shuffling algorithm	
 	var shuffle = function(array) {
 	  var m = array.length, t, i;
 
@@ -26,23 +25,35 @@ $(document).ready(function () {
 	  return array;
 	}
 
-	var dollarDisplay = function (amt) {
-		return ((parseInt(amt)<0)?"-":"")+"$"+Math.abs(amt).toLocaleString();
+// Formats dollar amounts as -$0000 when negative
+	var dollarDisplay = function (loc, amt) {
+		
+		(parseInt(amt)<0)?loc.addClass('negative'):loc.removeClass('negative');
+		loc.html(((parseInt(amt)<0)?"-":"")+"$"+Math.abs(amt).toLocaleString());
 	};
 
+	var dollarDisplayGreen = function (loc, amt) {
+		
+		(parseInt(amt)<0)?loc.addClass('negative'):loc.removeClass('negative');
+		(parseInt(amt)>0)?loc.addClass('positive'):loc.removeClass('positive');
+		loc.html(((parseInt(amt)<0)?"-":"")+"$"+Math.abs(amt).toLocaleString());
+	};
+
+// Determines the price range for 'easy' mode
 	var getRange = function (p) {
 		switch (true) {
 			case (parseInt(p.value) > 1000000):
 				return "More than $1,000,000";
 				break;
 			case (parseInt(p.value) >= 500000):
-				return "More than $500,000; less than $1,000,000"
+				return "At least $500,000; up to $1,000,000"
 				break;
 			default: 
 				return "Less than $500,000";
 		}
 	};
 
+// Loads a home onto the screen
 	var loadParcel = function (obj) {
 		$('#image').html("<img src=Images/Properties/"+obj.parcel1+obj.parcel2+".jpeg class='img-responsive img-circle' alt='House'>");
 		$('#sf').html(parseInt(obj.squarefeet).toLocaleString());
@@ -57,18 +68,21 @@ $(document).ready(function () {
 
 	};
 
+// Places players' selected names in the appropriate places 
 	var setNames = function () {
 		players[0].name = $('#player1name').val();
 		players[1].name = $('#player2name').val();
 		$('#p1input label').html(players[0].name+" bid $");
 		$('#p2input label').html(players[1].name+" bid $");
-		$('#p1-bank-name').html(players[0].name+" Bankroll");
-		$('#p2-bank-name').html(players[1].name+" Bankroll");
-		$('#p1-bank-amt').html(dollarDisplay(players[0].bankroll));
-		$('#p2-bank-amt').html(dollarDisplay(players[1].bankroll));
+		$('#p1-bank-name').html(players[0].name+" Bank Account");
+		$('#p2-bank-name').html(players[1].name+" Bank Account");
+		dollarDisplay($('#p1-bank-amt'), players[0].bankroll);
+		dollarDisplay($('#p2-bank-amt'), players[1].bankroll);
+
 
 	};
 
+// Switches the 'active' player
 	var switchPlayer = function () {
 		if (players[0].active) {
 			players[0].active = 0;
@@ -79,22 +93,47 @@ $(document).ready(function () {
 		}
 	};
 
+// Checks whether a submitted bid is a positive whole number, does not include any text, 
+// and if 'easy' mode is on, checks that it is within range.
 	var validBid = function (b) {
-		int = parseInt(b, 10);
-		if (int.toString()===b) {
-			return (int>0);
-		}
-		return false;
+		var ii = parseInt(b, 10);
+		
+		var str = getRange(parcels[index]);
+		
+		if (ii.toString()!==b) {
+			return false;
+		} else if ($('#hard:checked')[0]) {
+				return ii>0;
+			} else {
+				switch(str){
+					case ("Less than $500,000"):
+						return (0<ii&&ii<500000);
+						break;
+					case ("At least $500,000; up to $1,000,000"):
+						return (500000<=ii&&ii<=1000000);
+						break;
+					case ("More than $1,000,000"):
+						return (1000000<ii);
+						break;
+				}
+
+			}
+
 	};
 
+// Determines the winner of an auction
 	var getWinner = function () {
-		if (parseInt(players[0].bid) > parseInt(players[1].bid)) {
+		if (parseInt(players[0].bid) == parseInt(players[1].bid)) {
+			swal("The auction was a tie! Both players bid the same amount. The winner will instead be decided by a coin flip.");
+			return (Math.random()>.5)?1:0;
+		} else if (parseInt(players[0].bid) > parseInt(players[1].bid)) {
 			return 0;
 		} else if (parseInt(players[0].bid) < parseInt(players[1].bid)) {
 			return 1;
 		}
-	}
+	};
 
+// Chooses text for the winner of the game.
 	var winText = function () {
 		if (parseInt(players[0].bankroll) > parseInt(players[1].bankroll)) {
 			return players[0].name + " wins the game!";
@@ -105,14 +144,23 @@ $(document).ready(function () {
 		}
 	};
 
+// Checks that both name fields have a submission and that they are not the same.
 	var validNames = function (n1, n2) {
 		return ((n1.length&&n2.length)&&(n1!=n2));
 	};
 
-	// var setDifficulty = function () {
+// Event listeners for the 'up' and 'down' carets.
+	$('#collapser').on('click', 'i.fa-caret-down', function () {
+		$('#caret').addClass('fa-caret-up');
+		$('#caret').removeClass('fa-caret-down');	
+	});
 
-	// };
+	$('#collapser').on('click', 'i.fa-caret-up', function () {
+		$('#caret').addClass('fa-caret-down');
+		$('#caret').removeClass('fa-caret-up');	
+	});
 
+// Events triggered when 'Start Game' on the info screen is clicked.
 	$('#startGame').submit(function (e) {
 		e.preventDefault();
 
@@ -125,6 +173,8 @@ $(document).ready(function () {
 			$('.stats').removeClass('hidden');
 			$('#bankroll').removeClass('hidden');
 			$('#demo').collapse('show');
+			$('i').addClass('fa-caret-down');
+			$('i').removeClass('fa-caret-up');
 
 			if ($('#easy:checked')[0]) {
 				$('#difficulty-range').removeClass('hidden');
@@ -148,17 +198,18 @@ $(document).ready(function () {
 			$('#p1input').focus()
 			$('#info').addClass('hidden');
 		} else {
-			alert("Please enter different names in both fields.");
+			swal("Try again!", "Make sure you enter something in both fields, and that your names are different from each other.", "error");
 		};
 
 	});
 
+// Events triggered when player 1 submits a bid
 	$('#p1input').submit(function (e) {
 		e.preventDefault();
 
 		if (!validBid($('#player1bid').val())) {
 			
-			alert("Please enter a positive integer!");
+			swal("Try again!", "Your bid must include only positive whole numbers, and must be within the specified range if playing in Beginner Mode.", "error");
 			$('#player1bid').val('').focus();
 
 		} else {
@@ -174,12 +225,13 @@ $(document).ready(function () {
 			
 	});
 
+// Events triggered when player 2 submits a bid
 	$('#p2input').submit(function (e) {
 		e.preventDefault();
 
 		if (!validBid($('#player2bid').val())) {
 			
-			alert("Please enter an integer!");
+			swal("Try again!", "Your bid must include only positive whole numbers, and must be within the specified range if playing in Beginner Mode.", "error");
 			$('#player2bid').val('').focus();
 
 		} else {
@@ -190,6 +242,10 @@ $(document).ready(function () {
 			$('#player2bid').val('').focus();		
 			$('#p2input').addClass('hidden');
 
+			$('#demo').collapse('hide');
+			$('#auc-next button').focus();
+			$('.box').addClass('hidden');
+			$('.auction').removeClass('hidden');
 
 			$('#p1-auc-name').html(players[0].name+" bid");
 			$('#p2-auc-name').html(players[1].name+" bid");
@@ -197,24 +253,24 @@ $(document).ready(function () {
 			$('#p2-auc-bid').html("$"+parseInt(players[1].bid).toLocaleString());
 			winner = getWinner();
 			$('#auc-winner').html(players[winner].name+" wins the auction!");
-			$('#demo').collapse('hide');
-			$('#auc-next button').focus();
-			$('.box').addClass('hidden');
-			$('.auction').removeClass('hidden');
+			$('#auc-next').removeClass('hidden');
+
 		} 
 			
 	});
 
+// Events triggered when 'Next' is hit during the auction.
 	$('#auc-next').submit(function (e) {
 		e.preventDefault();
 
 		$('.auction').addClass('hidden');
+		$('#auc-winner').html('')
 		$('#compare-name').html(players[winner].name+" bid");
-		$('#compare-bid').html("$"+parseInt(players[winner].bid).toLocaleString());
+		$('#compare-bid').html("- $"+parseInt(players[winner].bid).toLocaleString());
 		$('#compare-home').html("$"+parseInt(parcels[index].value).toLocaleString());
 		$('#compare-net-name').html(players[winner].name+" net");
-		var net = parcels[index].value - players[winner].bid;
-		$('#compare-net').html(dollarDisplay(net));		
+		var net = parseInt(parcels[index].value) - parseInt(players[winner].bid);
+		dollarDisplayGreen($('#compare-net'), net);
 		players[winner].bankroll += net;
 		setNames(); 
 		$('.compare').removeClass('hidden');
@@ -222,6 +278,7 @@ $(document).ready(function () {
 			
 	});
 
+// Events triggered when 'Next' is hit during the comparison phase
 	$('#comp-next').submit(function (e) {
 		e.preventDefault();
 
@@ -243,13 +300,15 @@ $(document).ready(function () {
 			$('#endGame h3').html(winText());
 			$('#p1input').addClass('hidden');
 			$('#demo').collapse('hide');
+			$('#caret').addClass('fa-caret-up');
+			$('#caret').removeClass('fa-caret-down');
 			$('#endGame').removeClass('hidden');
 		};	
 	});
 
+// Events triggered when a new game is started after an old one finishes
 	$('#endGame-newGame').submit(function (e) {
 		e.preventDefault();
-
 		$('#player1name').val('');
 		$('#player2name').val('');
 		$('#endGame').addClass('hidden');
@@ -258,12 +317,11 @@ $(document).ready(function () {
 		$('#bankroll').addClass('hidden');
 		$('#frame').addClass('hidden');
 		$('#info').removeClass('hidden');
-
 	});
 
+// Events triggered when a new game is started at any other point
 	$('#btn-newGame').submit(function (e) {
 		e.preventDefault();
-
 		$('#player1name').val('');
 		$('#player2name').val('');
 		$('#image').addClass('hidden');
@@ -273,18 +331,6 @@ $(document).ready(function () {
 		$('#bankroll').addClass('hidden');
 		$('#frame').addClass('hidden');
 		$('#info').removeClass('hidden');
-
 	});
-
-
-
-
-
-
-
-
-
-
-
 
 });
